@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
+import QtQuick.Controls 2.3
 
 Window {
     visible: true
@@ -36,6 +37,15 @@ Window {
                 font.pixelSize: 12
             }
         }
+
+        Button {
+            id: button1
+            x: 440
+            y: 8
+            width: 100
+            height: 40
+            text: "Send"
+        }
     }
 
     Rectangle {
@@ -65,6 +75,15 @@ Window {
                 text: qsTr("")
                 font.pixelSize: 12
             }
+        }
+
+        Button {
+            id: button2
+            x: 440
+            y: 8
+            width: 100
+            height: 40
+            text: "Send"
         }
     }
 }
