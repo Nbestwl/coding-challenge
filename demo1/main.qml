@@ -1,13 +1,29 @@
-import QtQuick 2.9
+import QtQuick 2.8
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 
-Window {
+ApplicationWindow {
+    id: mainWindow
     visible: true
     width: 640
     height: 480
     color: "#161212"
     title: qsTr("Coding Challenge Chat Tool")
+
+    Popup {
+        id: popup
+        x: 100
+        y: 100
+        width: 200
+        height: 300
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        Dialog {
+            x: (parent.width - width) / 2
+            y: (parent.height - height) / 2
+        }
+    }
 
     Rectangle {
         id: rectangle1
@@ -23,6 +39,11 @@ Window {
            onClicked: {
                rectangle1.color = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
            }
+        }
+
+        Component.onCompleted: {
+            console.log("the rectangle color is: ", color)
+            popup.open()
         }
 
         Rectangle {
