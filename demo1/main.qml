@@ -18,6 +18,13 @@ Window {
         border.color: "#020202"
         opacity: 1
 
+        MouseArea {
+           anchors.fill: parent
+           onClicked: {
+               rectangle1.color = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
+           }
+        }
+
         Rectangle {
             id: rectangle3
             x: 8
@@ -45,6 +52,15 @@ Window {
             width: 100
             height: 40
             text: "Send"
+
+            MouseArea {
+                anchors.fill: parent
+                onPressedChanged: {
+                    if(pressed) {
+                        console.log("Mouse area is pressed")
+                    }
+                }
+            }
         }
     }
 
@@ -56,6 +72,13 @@ Window {
         height: 223
         opacity: 1
         border.color: "#020202"
+
+        MouseArea {
+           anchors.fill: parent
+           onClicked: {
+               rectangle2.color = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
+           }
+        }
 
         Rectangle {
             id: rectangle4
