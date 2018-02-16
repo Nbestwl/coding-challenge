@@ -1,6 +1,7 @@
 import QtQuick.Window 2.2
 import QtQuick 2.8
 import QtQuick.Controls 2.3
+import ChatServer 1.0
 
 ApplicationWindow {
     id: mainWindow
@@ -10,6 +11,11 @@ ApplicationWindow {
     color: "#161212"
     //  this set up the window title for the application
     title: qsTr("Coding Challenge Chat Tool")
+
+    //  initialize ChatServer component
+    ChatServer {
+        id: chatserver
+    }
 
     //  this Rectangle is the top rectangle component of the UI
     Rectangle {
@@ -64,19 +70,15 @@ ApplicationWindow {
                 onPressedChanged: {
                     if(pressed) {                        
                         console.log(input1.displayText)
+                        //  chatserver receives the signal
+                        chatserver.sendMessage(input1.displayText)
                     }
                 }
             }
         }
 
-        function addMsg() {
-            if(mouseArea1.pressed) {
-                return input1.displayText
-            }
-        }
-
         ScrollView {
-            id:view1
+            id: view1
             anchors {
                 top: input1.bottom
                 bottom: parent.bottom
@@ -87,7 +89,7 @@ ApplicationWindow {
             clip: true
 
             Label {
-                text: addMsg()
+                text: chatserver.message
                 font.pixelSize: 20
             }
         }
@@ -140,16 +142,29 @@ ApplicationWindow {
 
             //  signal handler for button on clicking
             MouseArea {
-                anchors.rightMargin: -51
-                anchors.bottomMargin: 0
-                anchors.leftMargin: 51
-                anchors.topMargin: 0
                 anchors.fill: parent
                 onPressedChanged: {
                     if(pressed) {
                         console.log("Mouse area is pressed")
                     }
                 }
+            }
+        }
+
+        ScrollView {
+            id: view2
+            anchors {
+                top: input2.bottom
+                bottom: parent.bottom
+                left: input2.left
+                right: input2.right
+                margins: 4
+            }
+            clip: true
+
+            Label {
+                text: chatserver.message
+                font.pixelSize: 20
             }
         }
     }

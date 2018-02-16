@@ -3,15 +3,23 @@
 
 #include <QObject>
 
-class ChatServer : public QObject
-{
+class ChatServer : public QObject {
     Q_OBJECT
-public:
-    explicit ChatServer(QObject *parent = nullptr);
+    Q_PROPERTY(QString message READ message WRITE sendMessage NOTIFY messageUpdate)
 
-signals:
+    public:
+        explicit ChatServer(QObject *parent = nullptr);
+        QString message();
 
-public slots:
+    signals:
+        void messageUpdate();
+
+    public slots:
+        void sendMessage(const QString message);
+
+    private:
+        QString m_message;
+
 };
 
 #endif // CHATSERVER_H
