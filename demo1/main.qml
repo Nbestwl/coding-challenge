@@ -1,5 +1,5 @@
-import QtQuick 2.8
 import QtQuick.Window 2.2
+import QtQuick 2.8
 import QtQuick.Controls 2.3
 
 ApplicationWindow {
@@ -43,7 +43,8 @@ ApplicationWindow {
             x: parent.width * 0.1
             y: parent.height * 0.03
             width: parent.width * 0.6
-            validator: IntValidator {bottom: 11; top: 31;}
+            placeholderText: qsTr("Enter message...")
+            font.pixelSize: 15
             focus: true
         }
 
@@ -65,9 +66,26 @@ ApplicationWindow {
                 anchors.fill: parent
                 onPressedChanged: {
                     if(pressed) {
-                        console.log("Mouse area is pressed")
+                        console.log(input1.displayText)
+
                     }
                 }
+            }
+        }
+
+        ScrollView {
+            anchors {
+                top: input1.bottom
+                bottom: parent.bottom
+                left: input1.left
+                right: input1.right
+                margins: 4
+            }
+            clip: true
+
+            Label {
+                text: "ABC"
+                font.pixelSize: 1000
             }
         }
     }
@@ -103,7 +121,8 @@ ApplicationWindow {
             x: parent.width * 0.1
             y: parent.height * 0.03
             width: parent.width * 0.6
-            validator: IntValidator {bottom: 11; top: 31;}
+            placeholderText: qsTr("Enter message...")
+            font.pixelSize: 15
             focus: false
         }
 
