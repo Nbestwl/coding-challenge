@@ -59,21 +59,24 @@ ApplicationWindow {
 
             //  signal handler for button on clicking
             MouseArea {
-                anchors.rightMargin: -51
-                anchors.bottomMargin: 0
-                anchors.leftMargin: 51
-                anchors.topMargin: 0
+                id: mouseArea1
                 anchors.fill: parent
                 onPressedChanged: {
-                    if(pressed) {
+                    if(pressed) {                        
                         console.log(input1.displayText)
-
                     }
                 }
             }
         }
 
+        function addMsg() {
+            if(mouseArea1.pressed) {
+                return input1.displayText
+            }
+        }
+
         ScrollView {
+            id:view1
             anchors {
                 top: input1.bottom
                 bottom: parent.bottom
@@ -84,8 +87,8 @@ ApplicationWindow {
             clip: true
 
             Label {
-                text: "ABC"
-                font.pixelSize: 1000
+                text: addMsg()
+                font.pixelSize: 20
             }
         }
     }
