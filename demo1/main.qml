@@ -68,10 +68,14 @@ ApplicationWindow {
                 id: mouseArea1
                 anchors.fill: parent
                 onPressedChanged: {
-                    if(pressed) {                        
-                        console.log(input1.displayText)
-                        //  chatserver receives the signal
-                        chatserver.sendMessage(input1.displayText)
+                    if(pressed || EnterKey.onClicked) {
+                        console.log("Sending: ", input1.text)
+                        if(input1.text.length != 0) {
+                            chatserver.sendMessage(input1.text, text1.text)
+                            userOneMessageText.text = chatserver.update()
+                            userTwoMessageText.text = chatserver.update()
+                        }
+                        input1.clear()
                     }
                 }
             }
@@ -88,9 +92,13 @@ ApplicationWindow {
             }
             clip: true
 
-            Label {
-                text: chatserver.message
-                font.pixelSize: 20
+            TextEdit {
+                id: userOneMessageText
+                readOnly: true
+                textFormat: Text.RichText // enables HTML formatting
+                font.family: "Helvetica"
+                font.pointSize: 18
+                color: "blue"
             }
         }
     }
@@ -145,7 +153,13 @@ ApplicationWindow {
                 anchors.fill: parent
                 onPressedChanged: {
                     if(pressed) {
-                        console.log("Mouse area is pressed")
+                        console.log("Sending: ", input2.text)
+                        if(input2.text.length != 0) {
+                            chatserver.sendMessage(input2.text, text2.text)
+                            userOneMessageText.text = chatserver.update()
+                            userTwoMessageText.text = chatserver.update()
+                        }
+                        input2.clear()
                     }
                 }
             }
@@ -162,9 +176,13 @@ ApplicationWindow {
             }
             clip: true
 
-            Label {
-                text: chatserver.message
-                font.pixelSize: 20
+            TextEdit {
+                id: userTwoMessageText
+                readOnly: true
+                textFormat: Text.RichText // enables HTML formatting
+                font.family: "Helvetica"
+                font.pointSize: 18
+                color: "blue"
             }
         }
     }

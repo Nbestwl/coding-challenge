@@ -1,17 +1,31 @@
 #include "chatserver.h"
+//#include "client.h"
 
 ChatServer::ChatServer(QObject *parent) : QObject(parent) {
-    m_message = "Hello";
+
 }
 
-QString ChatServer::message() {
-    return m_message;
+QVector<User> ChatServer::users() {
+    return m_users;
 }
 
-void ChatServer::sendMessage(const QString message) {
-    if(m_message == message) {
-        return;
+void ChatServer::sendMessage(QString message, QString username) {
+    User new_user;
+    new_user.name = username;
+    new_user.msg = message;
+    m_users.append(new_user);
+}
+
+QString ChatServer::update()
+{
+    QString final;
+
+    for(int i = 0; i < m_users.size(); ++i) {
+        if(m_users.at(i).name == "Ian") {
+            final += "<b><font color = \"red\">" + m_users.at(i).name + ":</font></b>" + m_users.at(i).msg + "<br>";
+        } else {
+            final += "<b><font color = \"blue\">" + m_users.at(i).name + ":</font></b>" + m_users.at(i).msg + "<br>";
+        }
     }
-    m_message = message;
-    emit messageUpdate();
+    return final;
 }

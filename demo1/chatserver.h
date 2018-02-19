@@ -2,24 +2,28 @@
 #define CHATSERVER_H
 
 #include <QObject>
+#include <QVector>
+
+struct User {
+    QString name;
+    QString msg;
+};
 
 class ChatServer : public QObject {
     Q_OBJECT
-    Q_PROPERTY(QString message READ message WRITE sendMessage NOTIFY messageUpdate)
 
     public:
         explicit ChatServer(QObject *parent = nullptr);
-        QString message();
+        QVector<User> users();
 
     signals:
-        void messageUpdate();
 
     public slots:
-        void sendMessage(const QString message);
+        void sendMessage(QString message, QString username);
+        QString update();
 
     private:
-        QString m_message;
-
+        QVector<User> m_users;
 };
 
 #endif // CHATSERVER_H

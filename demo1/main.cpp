@@ -16,9 +16,5 @@ int main(int argc, char *argv[])
     if (engine.rootObjects().isEmpty())
         return -1;
 
-    //  Create two server instances and connect two server objects together
-//    ChatServer server1, server2;
-//    QObject::connect(&server1, SIGNAL(userNameChanged()), &server2, SLOT(setUserName));
-
     return app.exec();
 }
