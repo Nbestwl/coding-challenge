@@ -17,8 +17,25 @@ class ChatServer : public QObject {
     public:
         explicit ChatServer(QObject *parent = nullptr);
         //  this acts as the destructor of the chatserver class, it will be called after the window is closed
-        ~ChatServer() { qDebug() << "chat is dead"; }
-        QVector<User> users();
+        ~ChatServer() {
+            //  prompt the user that the destructor is being called
+            qDebug() << "start deleting a chat block object...";
+            //  this while loop will loop through all indexes and delete all pointers stored there in registerQueue
+            while(registerQueue.size() > 0) {
+                delete registerQueue.takeAt(0);
+            }
+            //  pop the vector container in the end
+            registerQueue.clear();
+
+            //  this while loop will loop through all indexes and delete all pointers stored there in m_users
+            while(m_users.size() > 0) {
+                delete m_users.takeAt(0);
+            }
+            //  pop the vector container in the end
+            m_users.clear();
+            //  prompt the user the destructor is completed
+            qDebug() << "The chat is now dead";
+        }
 
     signals:
 
@@ -26,7 +43,7 @@ class ChatServer : public QObject {
         //  pre: this method takes in a qstring message, and a qstring username
         //  post: this methods bundle the message with corresponding username
         //  return: None
-        void sendMessage(QString message, QString username);
+        Q_INVOKABLE void sendMessage(QString message, QString username);
         //  pre: None
         //  post: this methods update the qstring and update it to the scrollview later
         //  return: qstring
@@ -46,7 +63,7 @@ class ChatServer : public QObject {
 
     private:
         //  user vector
-        QVector<User> m_users;
+        QVector<User*> m_users;
         //  register vector
         QVector<QObject*> registerQueue;
 };

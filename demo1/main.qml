@@ -16,7 +16,9 @@ ApplicationWindow {
     title: qsTr("Coding Challenge Chat Tool")
     //  this handler indicates whether the mainwindow is closed or not
     onClosing: {
-        quitChat()  //  this calls the chat block destructor function once the window is closed
+        //  this is the second approach, thus i comment it out for now
+        //  this calls the chat block destructor function once the window is closed
+//        quitChat()
     }
 
     //  Prompt a dialog window for user name registration
@@ -204,6 +206,9 @@ ApplicationWindow {
             console.error(component.errorString())
     }
 
+    //  NOTE: this is my second approach, which it calles the built-in destroy function from individual component and it acts as a destructor.
+    //        However, i am using the destructor from chatserver class to handle all component destructions.
+
     //  customized chat block destructor
     function quitChat() {
         console.log("the main window is closed")
@@ -217,6 +222,5 @@ ApplicationWindow {
             //  destroy the corresponding chat block
             object.destroy()
         }
-
     }
 }
