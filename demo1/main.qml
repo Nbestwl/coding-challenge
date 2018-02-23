@@ -2,6 +2,7 @@ import QtQuick.Window 2.2
 import QtQuick 2.8
 import QtQuick.Controls 2.3
 import ChatServer 1.0
+import QtQuick.Layouts 1.3
 
 ApplicationWindow {
     id: mainWindow
@@ -11,6 +12,81 @@ ApplicationWindow {
     color: "#161212"
     //  this set up the window title for the application
     title: qsTr("Coding Challenge Chat Tool")
+
+    Component.onCompleted: popup.open()
+
+    Popup {
+        id: popup
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        width: parent.width / 2.5
+        height: parent.height / 2.5
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+        Text {
+            id: usertext1
+            color: "steelblue"
+            text: qsTr("User 1")
+            font.pixelSize: 17
+            //  align the text to the center
+            anchors {
+                right: username1.left
+                verticalCenter: username1.verticalCenter
+                rightMargin: 10
+            }
+        }
+
+        TextField {
+            id: username1
+            width: parent.width * 0.5
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+            }
+            placeholderText: qsTr("Enter username...")
+            font.pixelSize: 13
+            focus: true
+        }
+
+        Text {
+            id: usertext2
+            color: "steelblue"
+            text: qsTr("User 2")
+            font.pixelSize: 17
+            //  align the text to the center
+            anchors {
+                right: username2.left
+                verticalCenter: username2.verticalCenter
+                rightMargin: 10
+            }
+            horizontalAlignment: Text.AlignHCenter
+        }
+
+        TextField {
+            id: username2
+            width: parent.width * 0.5
+            anchors {
+                top: username1.bottom
+                topMargin: 20
+                horizontalCenter: parent.horizontalCenter
+            }
+            placeholderText: qsTr("Enter username...")
+            font.pixelSize: 13
+            focus: false
+        }
+
+        Button {
+            anchors {
+                top: username2.bottom
+                topMargin: 80
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            text: qsTr("Enter chat room")
+            onClicked: popup.close()
+        }
+    }
 
     //  initialize ChatServer component
     ChatServer {
@@ -36,7 +112,7 @@ ApplicationWindow {
             width: 62
             height: 39
             color: "steelblue"
-            text: qsTr("Ian")
+            text: username1.text
             font.pixelSize: 24
             //  align the text to the center
             horizontalAlignment: Text.AlignHCenter
@@ -121,7 +197,7 @@ ApplicationWindow {
             width: 62
             height: 39
             color: "steelblue"
-            text: qsTr("Lei")
+            text: username2.text
             font.pixelSize: 24
             //  align the text to the center
             horizontalAlignment: Text.AlignHCenter

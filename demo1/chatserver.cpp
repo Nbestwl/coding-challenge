@@ -21,7 +21,7 @@ QString ChatServer::update()
     QString final;
 
     for(int i = 0; i < m_users.size(); ++i) {
-        if(m_users.at(i).name == "Ian") {
+        if(m_users.at(i).name == m_users.at(0).name) {
             final += "<b><font color = \"red\">" + m_users.at(i).name + ":</font></b>" + m_users.at(i).msg + "<br>";
         } else {
             final += "<b><font color = \"blue\">" + m_users.at(i).name + ":</font></b>" + m_users.at(i).msg + "<br>";
