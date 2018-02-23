@@ -160,13 +160,14 @@ ApplicationWindow {
         }
     }
 
+    //  this is the chat block initialization function, it takes a username and the position x and y
     function chatBlockCreator(username, x, y) {
         var component = Qt.createComponent("chatBlock.qml")
         if(component.status == Component.Ready) {
             var chatBlock = component.createObject(mainWindow, {"x": x, "y": y})
 
             chatBlock.name = username
-            chatBlock.chatupdate = chatserver.update()
+            chatserver.setRegister(chatBlock)
         } else
             console.error(component.errorString())
     }

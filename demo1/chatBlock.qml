@@ -12,9 +12,9 @@ import QtQuick.Controls.Styles 1.4
 import ChatServer 1.0
 
 Rectangle {
+    //  component property initialization
     property alias name : username.text
-    property alias message : messageInput.text
-    property alias chatupdate : userOutput.text
+    property alias message: userOutput.text
 
     id: blockframe
     //  inherite window sizes from the main window to resize component proportionally
@@ -48,7 +48,7 @@ Rectangle {
 
     //  send button component, also inherite the size from its parent
     Button {
-        id: button1
+        id: myButton
         x: parent.width * 0.1 + messageInput.width + 10
         y: parent.height * 0.03
         width: parent.width * 0.15
@@ -57,19 +57,32 @@ Rectangle {
 
         //  signal handler for button on clicking
         MouseArea {
-            id: mouseArea1
+            id: myMouseArea
             anchors.fill: parent
             onPressedChanged: {
                 if(pressed || EnterKey.onClicked) {
                     console.log("Sending: ", messageInput.text)
                     if(messageInput.text.length != 0) {
+                        //  update the message append the username if the message is sent successfully
                         chatserver.sendMessage(messageInput.text, username.text)
-                        userOutput.text = chatserver.update()
-//                        userTwoMessageText.text = chatserver.update()
+                        //  call the JS function to render all existing messages
+                        updateAll()
                     }
                     messageInput.clear()
                 }
             }
+        }
+    }
+
+    //  this function append the updated message to the scrollview every time when the button is pressed.
+    function updateAll() {
+        var size = chatserver.getSize()
+
+        //  using a for loop loop through all messages from all users.
+        for(var i = 0; i < size; i++) {
+            //  get the stored QOject at index i
+            var object = chatserver.getRegister(i)
+            object.message = chatserver.update()
         }
     }
 

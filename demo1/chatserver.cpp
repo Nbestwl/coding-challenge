@@ -9,6 +9,21 @@ QVector<User> ChatServer::users() {
     return m_users;
 }
 
+int ChatServer::getSize()
+{
+    return registerQueue.size();
+}
+
+void ChatServer::setRegister(QObject *location)
+{
+    registerQueue.append(location);
+}
+
+QObject* ChatServer::getRegister(int index)
+{
+    return registerQueue[index];
+}
+
 void ChatServer::sendMessage(QString message, QString username) {
     User new_user;
     new_user.name = username;
