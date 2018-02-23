@@ -15,20 +15,21 @@ ApplicationWindow {
     //  this set up the window title for the application
     title: qsTr("Coding Challenge Chat Tool")
 
-    //  Prompt a pop window for user name registration
-    Component.onCompleted: popup.open()
+    //  Prompt a dialog window for user name registration
+    Component.onCompleted: mydialog.open()
 
-    // popup window setup
+    //  dialog window setup
     Dialog {
-        id: popup
+        id: mydialog
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
         parent: ApplicationWindow.overlay
-        width: parent.width / 2
-        height: parent.height / 2
+        width: parent.width / 1.8
+        height: parent.height / 2.5
         modal: true
         focus: true
         title: qsTr("Username Registration")
+        closePolicy: mydialog.CloseOnEscape | mydialog.CloseOnPressOutsideParent
 
         Text {
             id: usertext1
@@ -108,13 +109,18 @@ ApplicationWindow {
         Button {
             anchors {
                 top: username2.bottom
-                topMargin: 80
+                topMargin: 30
                 horizontalCenter: parent.horizontalCenter
             }
 
             text: qsTr("Enter chat room")
             onClicked: checkUser()  //  call the JS function for user name validation
         }
+    }
+
+    //  initialize ChatServer component
+    ChatServer {
+        id: chatserver
     }
 
     //  customized function for handling username empty check and make usernames are not duplicated
@@ -124,6 +130,7 @@ ApplicationWindow {
             console.log("Username2 is empty")
         } else {
             warning1.text = ""
+            console.log("username1 : " + username1.text)
         }
 
         if(username2.text.length == 0) {
@@ -131,6 +138,7 @@ ApplicationWindow {
             console.log("Username2 is empty")
         } else {
             warning2.text = ""
+            console.log("username2 : " + username2.text)
         }
 
         if((username1.text == username2.text) && (username1.text.length != 0)) {
@@ -140,183 +148,26 @@ ApplicationWindow {
         }
 
         if((username1.text != username2.text) && (username1.text.length != 0) && (username2.text.length != 0)){
-            popup.close()   //  close the popup if the username satifies the above conditions
+            mydialog.close()   //  close the dialog if the username satifies the above conditions
             console.log("users register successful")
+
+            //  if the dialog exits successfully then call the chatblockcreator class to initailize two basic chat blocks
+            chatBlockCreator(username1.text, 0, 0);
+            console.log("chat block 1 created successful")
+            //  this creates the second chat block
+            chatBlockCreator(username2.text, 0, mainWindow.height * 0.5);
+            console.log("chat block 2 created successful")
         }
     }
 
-    //  initialize ChatServer component
-    ChatServer {
-        id: chatserver
-    }
+    function chatBlockCreator(username, x, y) {
+        var component = Qt.createComponent("chatBlock.qml")
+        if(component.status == Component.Ready) {
+            var chatBlock = component.createObject(mainWindow, {"x": x, "y": y})
 
-    //  this Rectangle is the top rectangle component of the UI
-    Rectangle {
-        id: rectangle1
-        x: 0
-        y: 0
-        //  inherite window sizes from the main window to resize component proportionally
-        width: parent.width
-        height: parent.height * 0.49
-        border.color: "#020202"
-        opacity: 1
-
-        //  this is the name of the user
-        Text {
-            id: text1
-            x: 8
-            y: 8
-            width: 62
-            height: 39
-            color: "steelblue"
-            text: username1.text
-            font.pixelSize: 24
-            //  align the text to the center
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-        }
-
-        //  this is the first user input field and it resize according to its parent's window size
-        TextField {
-            id: input1
-            x: parent.width * 0.1
-            y: parent.height * 0.03
-            width: parent.width * 0.6
-            placeholderText: qsTr("Enter message...")
-            font.pixelSize: 15
-            focus: true
-        }
-
-        //  send button component, also inherite the size from its parent
-        Button {
-            id: button1
-            x: parent.width * 0.1 + input1.width + 10
-            y: parent.height * 0.03
-            width: parent.width * 0.15
-            height: input1.height
-            text: "Send"
-
-            //  signal handler for button on clicking
-            MouseArea {
-                id: mouseArea1
-                anchors.fill: parent
-                onPressedChanged: {
-                    if(pressed || EnterKey.onClicked) {
-                        console.log("Sending: ", input1.text)
-                        if(input1.text.length != 0) {
-                            chatserver.sendMessage(input1.text, text1.text)
-                            userOneMessageText.text = chatserver.update()
-                            userTwoMessageText.text = chatserver.update()
-                        }
-                        input1.clear()
-                    }
-                }
-            }
-        }
-
-        ScrollView {
-            id: view1
-            anchors {
-                top: input1.bottom
-                bottom: parent.bottom
-                left: input1.left
-                right: input1.right
-                margins: 4
-            }
-            clip: true
-
-            TextEdit {
-                id: userOneMessageText
-                readOnly: true
-                textFormat: Text.RichText // enables HTML formatting
-                font.family: "Helvetica"
-                font.pointSize: 18
-                color: "blue"
-            }
-        }
-    }
-
-    //  this is the second rectangle at the bottom of the UI
-    Rectangle {
-        id: rectangle2
-        x: 0
-        y: parent.height * 0.5
-        width: parent.width
-        height: parent.height * 0.49
-        opacity: 1
-        border.color: "#020202"
-
-        //  this is the second user name
-        Text {
-            id: text2
-            x: 8
-            y: 8
-            width: 62
-            height: 39
-            color: "steelblue"
-            text: username2.text
-            font.pixelSize: 24
-            //  align the text to the center
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-        }
-
-        //  this is the first user input field and it resize according to its parent's window size
-        TextField {
-            id: input2
-            x: parent.width * 0.1
-            y: parent.height * 0.03
-            width: parent.width * 0.6
-            placeholderText: qsTr("Enter message...")
-            font.pixelSize: 15
-            focus: false
-        }
-
-        //  send button component, also inherite the size from its parent
-        Button {
-            id: button2
-            x: parent.width * 0.1 + input2.width + 10
-            y: parent.height * 0.03
-            width: parent.width * 0.15
-            height: input2.height
-            text: "Send"
-
-            //  signal handler for button on clicking
-            MouseArea {
-                anchors.fill: parent
-                onPressedChanged: {
-                    if(pressed) {
-                        console.log("Sending: ", input2.text)
-                        if(input2.text.length != 0) {
-                            chatserver.sendMessage(input2.text, text2.text)
-                            userOneMessageText.text = chatserver.update()
-                            userTwoMessageText.text = chatserver.update()
-                        }
-                        input2.clear()
-                    }
-                }
-            }
-        }
-
-        ScrollView {
-            id: view2
-            anchors {
-                top: input2.bottom
-                bottom: parent.bottom
-                left: input2.left
-                right: input2.right
-                margins: 4
-            }
-            clip: true
-
-            TextEdit {
-                id: userTwoMessageText
-                readOnly: true
-                textFormat: Text.RichText // enables HTML formatting
-                font.family: "Helvetica"
-                font.pointSize: 18
-                color: "blue"
-            }
-        }
+            chatBlock.name = username
+            chatBlock.chatupdate = chatserver.update()
+        } else
+            console.error(component.errorString())
     }
 }
