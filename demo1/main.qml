@@ -15,17 +15,20 @@ ApplicationWindow {
     //  this set up the window title for the application
     title: qsTr("Coding Challenge Chat Tool")
 
+    //  Prompt a pop window for user name registration
     Component.onCompleted: popup.open()
 
-    Popup {
+    // popup window setup
+    Dialog {
         id: popup
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
+        parent: ApplicationWindow.overlay
         width: parent.width / 2
         height: parent.height / 2
         modal: true
         focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        title: qsTr("Username Registration")
 
         Text {
             id: usertext1
@@ -39,7 +42,7 @@ ApplicationWindow {
                 rightMargin: 10
             }
         }
-
+        //  Username1 input field
         TextField {
             id: username1
             width: parent.width * 0.5
@@ -50,7 +53,7 @@ ApplicationWindow {
             font.pixelSize: 13
             focus: true
         }
-
+        //  warning message field
         Text {
             id: warning1
             color: "red"
@@ -76,7 +79,7 @@ ApplicationWindow {
             }
             horizontalAlignment: Text.AlignHCenter
         }
-
+        //  Username2 input field
         TextField {
             id: username2
             width: parent.width * 0.5
@@ -89,7 +92,7 @@ ApplicationWindow {
             font.pixelSize: 13
             focus: false
         }
-
+        //  warning message for user 2
         Text {
             id: warning2
             color: "red"
@@ -101,7 +104,7 @@ ApplicationWindow {
                 leftMargin: 10
             }
         }
-
+        //  Button for registration confirmation
         Button {
             anchors {
                 top: username2.bottom
@@ -110,7 +113,7 @@ ApplicationWindow {
             }
 
             text: qsTr("Enter chat room")
-            onClicked: checkUser()
+            onClicked: checkUser()  //  call the JS function for user name validation
         }
     }
 
@@ -137,7 +140,7 @@ ApplicationWindow {
         }
 
         if((username1.text != username2.text) && (username1.text.length != 0) && (username2.text.length != 0)){
-            popup.close()
+            popup.close()   //  close the popup if the username satifies the above conditions
             console.log("users register successful")
         }
     }
