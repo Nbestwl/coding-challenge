@@ -1,8 +1,10 @@
 import QtQuick.Window 2.2
 import QtQuick 2.8
 import QtQuick.Controls 2.3
-import ChatServer 1.0
 import QtQuick.Layouts 1.3
+import QtQuick.Controls.Styles 1.4
+
+import ChatServer 1.0
 
 ApplicationWindow {
     id: mainWindow
@@ -19,8 +21,8 @@ ApplicationWindow {
         id: popup
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
-        width: parent.width / 2.5
-        height: parent.height / 2.5
+        width: parent.width / 2
+        height: parent.height / 2
         modal: true
         focus: true
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
@@ -50,6 +52,18 @@ ApplicationWindow {
         }
 
         Text {
+            id: warning1
+            color: "red"
+            font.pixelSize: 12
+            //  align the text to the center
+            anchors {
+                left: username1.right
+                verticalCenter: username1.verticalCenter
+                leftMargin: 10
+            }
+        }
+
+        Text {
             id: usertext2
             color: "steelblue"
             text: qsTr("User 2")
@@ -68,12 +82,24 @@ ApplicationWindow {
             width: parent.width * 0.5
             anchors {
                 top: username1.bottom
-                topMargin: 20
+                topMargin: 40
                 horizontalCenter: parent.horizontalCenter
             }
             placeholderText: qsTr("Enter username...")
             font.pixelSize: 13
             focus: false
+        }
+
+        Text {
+            id: warning2
+            color: "red"
+            font.pixelSize: 12
+            //  align the text to the center
+            anchors {
+                left: username2.right
+                verticalCenter: username2.verticalCenter
+                leftMargin: 10
+            }
         }
 
         Button {
@@ -84,7 +110,35 @@ ApplicationWindow {
             }
 
             text: qsTr("Enter chat room")
-            onClicked: popup.close()
+            onClicked: checkUser()
+        }
+    }
+
+    //  customized function for handling username empty check and make usernames are not duplicated
+    function checkUser() {
+        if(username1.text.length == 0) {
+            warning1.text = "Username empty"
+            console.log("Username2 is empty")
+        } else {
+            warning1.text = ""
+        }
+
+        if(username2.text.length == 0) {
+            warning2.text = "Username empty"
+            console.log("Username2 is empty")
+        } else {
+            warning2.text = ""
+        }
+
+        if((username1.text == username2.text) && (username1.text.length != 0)) {
+            warning1.text = "Name duplicated"
+            warning2.text = "Name duplicated"
+            console.log("please enter a different name")
+        }
+
+        if((username1.text != username2.text) && (username1.text.length != 0) && (username2.text.length != 0)){
+            popup.close()
+            console.log("users register successful")
         }
     }
 
