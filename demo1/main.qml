@@ -14,6 +14,10 @@ ApplicationWindow {
     color: "#161212"
     //  this set up the window title for the application
     title: qsTr("Coding Challenge Chat Tool")
+    //  this handler indicates whether the mainwindow is closed or not
+    onClosing: {
+        quitChat()  //  this calls the chat block destructor function once the window is closed
+    }
 
     //  Prompt a dialog window for user name registration
     Component.onCompleted: mydialog.open()
@@ -123,6 +127,34 @@ ApplicationWindow {
         id: chatserver
     }
 
+//    ScrollView {
+//        id: myscroll
+//        anchors.fill: parent
+//        clip: false
+
+//        //  the model class for handling the data
+////        ListModel {
+////            id: chatModel
+
+////            ListElement {
+////                username: ''
+////            }
+////        }
+
+//        ListView {
+//            delegate: Component {
+//                Loader {
+//                    sourceComponent: {
+
+//                        return Qt.createQmlObject('import QtQuick 2.0; Rectangle {color: "red"; width: 20; height: 20}',
+//                                                  parentItem,
+//                                                  "dynamicSnippet1");
+//                    }
+//                }
+//            }
+//        }
+//    }
+
     //  customized function for handling username empty check and make usernames are not duplicated
     function checkUser() {
         if(username1.text.length == 0) {
@@ -170,5 +202,21 @@ ApplicationWindow {
             chatserver.setRegister(chatBlock)
         } else
             console.error(component.errorString())
+    }
+
+    //  customized chat block destructor
+    function quitChat() {
+        console.log("the main window is closed")
+
+        var size = chatserver.getSize()
+
+        //  using a for loop loop through all messages from all users.
+        for(var i = 0; i < size; i++) {
+            //  get the stored QOject at index i
+            var object = chatserver.getRegister(i)
+            //  destroy the corresponding chat block
+            object.destroy()
+        }
+
     }
 }

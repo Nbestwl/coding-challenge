@@ -16,6 +16,10 @@ Rectangle {
     property alias name : username.text
     property alias message: userOutput.text
 
+    //  emits a signal when the chat block class destructor is being called
+    //  prompt a message in console to make sure the object is deleted
+    Component.onDestruction: console.log("the user " + username.text + " is being destroyed!")
+
     id: blockframe
     //  inherite window sizes from the main window to resize component proportionally
     width: parent.width

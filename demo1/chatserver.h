@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QVector>
+#include <QDebug>
+
 
 struct User {
     QString name;
@@ -14,6 +16,8 @@ class ChatServer : public QObject {
 
     public:
         explicit ChatServer(QObject *parent = nullptr);
+        //  this acts as the destructor of the chatserver class, it will be called after the window is closed
+        ~ChatServer() { qDebug() << "chat is dead"; }
         QVector<User> users();
 
     signals:
